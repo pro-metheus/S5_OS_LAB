@@ -13,6 +13,12 @@ struct task{
 	struct task* next;
 }*head=NULL,*new_task,*cur_task;
 
+
+struct shortq{
+		int burst;
+		struct task* link;
+	};
+
 //thats the fucking data structure we are gonna use
 void spawn_task(char name[NAME_LENGTH],int burst, int priority){
 	new_task=(struct task*)malloc(sizeof(struct task));
@@ -58,6 +64,13 @@ void fcfs(){
 	}while(cur_task != NULL);
 }
 
+
+void sjf(){
+	
+	
+	struct shortq list[10];
+	
+}
 
 
 void main(){
