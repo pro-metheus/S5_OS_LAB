@@ -20,6 +20,11 @@ struct shortq{
 	};
 	
 	
+struct prioq{
+	int prio;
+	struct task* link;
+};
+	
 int count=0;
 
 //thats the fucking data structure we are gonna use
@@ -109,9 +114,56 @@ void sjf(){
 }
 
 
+
+
+void priority(){
+
+struct prioq queue[count];
+cur_task=head;
+int i=0;
+while(cur_task!=NULL){
+	queue[i].prio=cur_task->priority;
+	queue[i].link=cur_task;
+	i++;
+	cur_task=cur_task->next;
+}//queue filed
+int j;
+
+for(i=0;i<count;i++){
+		for(j=0;j<count;j++){
+			if(queue[i].prio<queue[j].prio){
+				struct prioq temp;
+				temp.prio=queue[j].prio;
+				temp.link=queue[j].link;
+				queue[j].prio=queue[i].prio;
+				queue[j].link=queue[i].link;
+				queue[i].prio=temp.prio;
+				queue[i].link=temp.link;
+			}
+		}
+	}
+	
+	int elapsed=0;
+	for(i=0;i<count;i++){
+		
+		int temp1;
+		temp1=queue[i].link->burst_time;
+		printf("%s task waiting time= %d, turaround time= %d\n",queue[i].link->process_name,elapsed,elapsed+temp1);
+		elapsed+=temp1;
+	}
+
+
+
+}
+
+
+
+
+
+
 void main(){
 	//here lies the main fuction....
-	printf("1 create task, 2 print tasks, 3 fcfs, 4 sjf 5 quit");
+	printf("1 create task, 2 print tasks, 3 fcfs, 4 sjf 5 priority algo 6quit");
 	int op;
 	while(1==1){
 	scanf("%d",&op);
@@ -134,7 +186,9 @@ void main(){
 			break;
 		case 4: sjf();
 			break;
-		case 5:exit(0);
+		case 5: priority();
+			break;
+		case 6:exit(0);
 	}
 	
 	
