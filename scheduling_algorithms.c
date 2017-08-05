@@ -18,6 +18,9 @@ struct shortq{
 		int burst;
 		struct task* link;
 	};
+	
+	
+int count=0;
 
 //thats the fucking data structure we are gonna use
 void spawn_task(char name[NAME_LENGTH],int burst, int priority){
@@ -68,14 +71,47 @@ void fcfs(){
 void sjf(){
 	
 	
-	struct shortq list[10];
+	struct shortq list[count];
+	cur_task=head;
+	int i=0;
+	while(cur_task!=NULL){
+		list[i].burst=cur_task->burst_time;
+		list[i].link=cur_task;
+		i++;
+		cur_task=cur_task->next;
+	}  //fills the shortq...now sort it some fucking way im using bubble sort cause i dont give a shit about the fucking complexity 
+	
+	int j=0;
+	i=0;
+	for(i=0;i<count;i++){
+		for(j=0;j<count;j++){
+			if(list[i].burst<list[j].burst){
+				struct shortq temp;
+				temp.burst=list[j].burst;
+				temp.link=list[j].link;
+				list[j].burst=list[i].burst;
+				list[j].link=list[i].link;
+				list[i].burst=temp.burst;
+				list[i].link=temp.link;
+			}
+		}
+	}
+	int elapsed=0;
+	for(i=0;i<count;i++){
+		
+		int temp1;
+		temp1=list[i].link->burst_time;
+		printf("%s task waiting time= %d, turaround time= %d\n",list[i].link->process_name,elapsed,elapsed+temp1);
+		elapsed+=temp1;
+	}
+	
 	
 }
 
 
 void main(){
 	//here lies the main fuction....
-	printf("1 create task, 2 print tasks, 3 quit");
+	printf("1 create task, 2 print tasks, 3 fcfs, 4 sjf 5 quit");
 	int op;
 	while(1==1){
 	scanf("%d",&op);
@@ -90,12 +126,15 @@ void main(){
 			int prio;
 			scanf("%d",&prio);
 			spawn_task(name,bt,prio);
+			count++;
 			break;
 		case 2:view_tasks();
 			break;
 		case 3:fcfs();
 			break;
-		case 4:exit(0);
+		case 4: sjf();
+			break;
+		case 5:exit(0);
 	}
 	
 	
