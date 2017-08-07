@@ -27,7 +27,7 @@ void main(){
 			break;
 		case 5: priority();  //verified
 			break;
-		case 6: round_robin(); //waiting time buggy
+		case 6: round_robin(); //verified
 			break;
 		case 7:clear_memory();
 		exit(0);
