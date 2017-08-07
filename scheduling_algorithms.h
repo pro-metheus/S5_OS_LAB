@@ -192,17 +192,43 @@ void round_robin(){
 	int done=0;
 	while(done ==0){
 		i=0;
+		int needed;
 		while(i<count){
 			if(log[i].finished==0){
+				
+				needed=log[i].link->burst_time - log[i].spent;
 			
-				if(log[i].link->burst_time-log[i].spent>=quanta){
+				if(needed>=quanta){
+					printf("task %s needs %d ",log[i].link->process_name,needed);
 				
 				log[i].spent+=quanta;
-				full=1;
+				int j=0;
+				for(j=0;j<count;j++){
+					if(i==j || log[j].finished==1){
+						continue;
+						printf("skipped");
+					}
+					else{
+						log[j].wait+=quanta;
+						printf("%d added waiting time--full",j);
+					}
+				}
 				}
 				
 				else{
-					log[i].spent+=log[i].link->burst_time-log[i].spent;
+					printf("task %s needs %d ",log[i].link->process_name,needed);
+					log[i].spent+=needed;
+					int j=0;
+				for(j=0;j<count;j++){
+					if(i==j || log[j].finished==1){
+						continue;
+						printf("skipped");
+					}
+					else{
+						log[j].wait=log[j].wait+needed;;
+						printf("%d added waiting time",j);
+					}
+				}
 					printf("task %s finished \n",log[i].link->process_name);
 					log[i].finished=1;
 					full=0;
@@ -211,21 +237,7 @@ void round_robin(){
 
 				
 				}
-				int j;
-				for(j=0;j<count;j++){
-					if(i==j){
-						continue;
-					}
-					else{
-						if(full==1){
-						
-						log[j].wait+=quanta;}
-						else{
-							log[j].wait+=log[i].link->burst_time-log[i].spent;
-						}
-						
-					}
-				}	
+					
 			
 			i++;
 			
